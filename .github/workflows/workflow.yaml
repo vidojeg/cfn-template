@@ -13,14 +13,12 @@ jobs:
     container: python:3.8
     steps:
     - name: Chekout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
     - name: Install dependencies
       run: pip install awscli cfn-lint
     - name: Validate & lint template
       run: |
         ls -laht
-        git config --local user.email github-actions
-        git config --local user.name github-actions@github.com
-        git status
+        git diff --name-only HEAD~1..HEAD
 
 
