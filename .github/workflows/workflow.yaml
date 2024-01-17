@@ -18,6 +18,7 @@ jobs:
       run: pip install awscli cfn-lint
     - name: Validate & lint template
       run: |
+        ls -laht
         git diff --name-only HEAD~1..HEAD | grep 'template.yaml' | while read line; do
           DIR=$(dirname "$line")
           aws cloudformation validate-template --template-body file://$DIR/template.yaml
@@ -43,11 +44,4 @@ jobs:
         pip install awscli
         apt-get update && apt-get install gettext-base jq -y
     - name: Deploy
-      run: |
-        for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do 
-          TEMPLATE_DIR=$(basename $dir); 
-          STACK_NAME=$BITBUCKET_BRANCH-stack-$TEMPLATE_DIR;
-          PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join("=")' $TEMPLATE_DIR/$BITBUCKET_BRANCH-parameters.json)
-          echo "START DEPLOYING $STACK_NAME"
-          aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS; 
-        done
+      run: "for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do \n  TEMPLATE_DIR=$(basename $dir); \n  STACK_NAME=$BITBUCKET_BRANCH-stack-$TEMPLATE_DIR;\n  PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join(\"=\")' $TEMPLATE_DIR/$BITBUCKET_BRANCH-parameters.json)\n  echo \"START DEPLOYING $STACK_NAME\"\n  aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS; \ndone\n"
