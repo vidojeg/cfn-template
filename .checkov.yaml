@@ -1,2 +1,2 @@
-skip_directories:
-- "/.github/*"
+skip-path:
+- ".github/*"
