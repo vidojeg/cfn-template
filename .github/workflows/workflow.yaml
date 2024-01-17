@@ -25,5 +25,12 @@ jobs:
           aws cloudformation validate-template --template-body file://$DIR/template.yaml
           cfn-lint -I $DIR/template.yaml
         done
-
+  scans:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+    - name: Terrascan scan
+      uses: tenable/terrascan-action@main
+    - name: Checkov scan
+      uses: bridgecrewio/checkov-action@v12
 
