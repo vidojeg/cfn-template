@@ -25,4 +25,3 @@ Outputs:
   QueueURL:
     Description: "URL of new Amazon SQS Queue"
     Value: !Ref MySQSQueue
-
