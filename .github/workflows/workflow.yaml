@@ -25,13 +25,7 @@ jobs:
           aws cloudformation validate-template --template-body file://$DIR/template.yaml
           cfn-lint -I $DIR/template.yaml
         done
-    - name: Terrascan scan
-      continue-on-error: true
-      uses: tenable/terrascan-action@main
-      with:
-        iac_type: cft
     - name: Checkov scan
-      continue-on-error: true
       uses: bridgecrewio/checkov-action@v12
       with:
         output_format: cli
