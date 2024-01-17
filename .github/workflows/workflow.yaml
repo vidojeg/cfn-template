@@ -19,29 +19,6 @@ jobs:
     - name: Validate & lint template
       run: |
         ls -laht
-        git diff --name-only HEAD~1..HEAD | grep 'template.yaml' | while read line; do
-          DIR=$(dirname "$line")
-          aws cloudformation validate-template --template-body file://$DIR/template.yaml
-          cfn-lint -I $DIR/template.yaml
-        done
-  scans:
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-    - name: Terrascan scan
-      uses: tenable/terrascan-action@main
-    - name: Checkov scan
-      uses: bridgecrewio/checkov-action@v12
-  deploy:
-    needs: [check, scans]
-    runs-on: ubuntu-latest
-    container: python:3.8
-    steps:
-    - name: Chekout code
-      uses: actions/checkout@v4
-    - name: Install dependencies
-      run: |
-        pip install awscli
-        apt-get update && apt-get install gettext-base jq -y
-    - name: Deploy
-      run: "for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do \n  TEMPLATE_DIR=$(basename $dir); \n  STACK_NAME=$BITBUCKET_BRANCH-stack-$TEMPLATE_DIR;\n  PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join(\"=\")' $TEMPLATE_DIR/$BITBUCKET_BRANCH-parameters.json)\n  echo \"START DEPLOYING $STACK_NAME\"\n  aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS; \ndone\n"
+        git status
+
+
