@@ -20,7 +20,10 @@ jobs:
     - name: Validate & lint template
       run: |
         ls -laht
-        git status
-        git diff $GITHUB_REF_NAME~1 $GITHUB_REF_NAME
+        git diff --name-only HEAD~1..HEAD | grep 'template.yaml' | while read line; do
+          DIR=$(dirname "$line")
+          aws cloudformation validate-template --template-body file://$DIR/template.yaml
+          cfn-lint -I $DIR/template.yaml
+        done
 
 
