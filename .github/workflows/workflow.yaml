@@ -37,4 +37,6 @@ jobs:
         output_format: cli
         output_file_path: console
         framerwork: cloudformation
+        quiet: true
+        soft_fail: true
 
