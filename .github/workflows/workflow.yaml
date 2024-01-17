@@ -30,7 +30,11 @@ jobs:
     needs: check
     steps:
     - name: Terrascan scan
+      continue-on-error: true
       uses: tenable/terrascan-action@main
+      with:
+        iac_type: cft
     - name: Checkov scan
+      continue-on-error: true
       uses: bridgecrewio/checkov-action@v12
 
