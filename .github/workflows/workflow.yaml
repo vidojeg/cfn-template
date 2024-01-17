@@ -10,7 +10,6 @@ env:
 jobs:
   check:
     runs-on: ubuntu-latest
-    container: python:3.8
     steps:
     - name: Chekout code
       uses: actions/checkout@v2
