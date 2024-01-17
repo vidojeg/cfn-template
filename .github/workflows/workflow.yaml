@@ -19,6 +19,8 @@ jobs:
     - name: Validate & lint template
       run: |
         ls -laht
+        git config --local user.email github-actions
+        git config --local user.name github-actions@github.com
         git status
 
 
