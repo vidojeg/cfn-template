@@ -19,5 +19,6 @@ jobs:
       run: |
         ls -laht
         git status
+        git diff $GITHUB_REF_NAME~1 $GITHUB_REF_NAME
 
 
