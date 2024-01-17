@@ -1,0 +1,10 @@
+[
+    {
+      "ParameterKey": "Env",
+      "ParameterValue": "stage"
+    },
+    {
+      "ParameterKey": "QueueName",
+      "ParameterValue": "stage-sqs-test-vidoje"
+    }
+]

@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create SQS Topics
+
+Parameters:
+  Env:
+    Type: String
+    Description: Env
+  QueueName:
+    Type: String
+    Description: Name of SQS Queue
+
+Resources:
+  MySQSQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref QueueName
+      VisibilityTimeout: 30
+      MessageRetentionPeriod: 345600
+      KmsMasterKeyId: alias/aws/sqs
+      Tags:
+      - Key: ENV
+        Value: !Ref Env
+
+Outputs:
+  QueueURL:
+    Description: "URL of new Amazon SQS Queue"
+    Value: !Ref MySQSQueue
