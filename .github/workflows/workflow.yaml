@@ -32,7 +32,7 @@ jobs:
     - name: Checkov scan
       uses: bridgecrewio/checkov-action@v12
   deploy:
-    needs: [check, scan]
+    needs: [check, scans]
     runs-on: ubuntu-latest
     container: python:3.8
     steps:
@@ -43,4 +43,11 @@ jobs:
         pip install awscli
         apt-get update && apt-get install gettext-base jq -y
     - name: Deploy
-      run: "for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do \n  TEMPLATE_DIR=$(basename $dir); \n  STACK_NAME=${{ github.ref }}-stack-$TEMPLATE_DIR;\n  PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join(\"=\")' $TEMPLATE_DIR/${{ github.ref }}-parameters.json)\n  echo \"START DEPLOYING $STACK_NAME\"\n  aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS; \ndone\n"
+      run: |
+        for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do 
+          TEMPLATE_DIR=$(basename $dir); 
+          STACK_NAME=$BITBUCKET_BRANCH-stack-$TEMPLATE_DIR;
+          PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join("=")' $TEMPLATE_DIR/$BITBUCKET_BRANCH-parameters.json)
+          echo "START DEPLOYING $STACK_NAME"
+          aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS; 
+        done
