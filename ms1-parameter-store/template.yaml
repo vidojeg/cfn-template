@@ -9,7 +9,7 @@ Parameters:
   ParameterList:
     Type: CommaDelimitedList
     Description: List of SSM parameters
-    Default: "variable1, variable2"
+    Default: "variable1,variable2"
 
 Resources:
   Fn::ForEach::Parameters:
@@ -22,4 +22,3 @@ Resources:
         Name: !Sub '/${Env}/test/${ParameterName}'
         Value: ""
         Description: !Sub 'SSM Parameter for ${ParameterName}'
-
