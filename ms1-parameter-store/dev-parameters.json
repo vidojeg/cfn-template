@@ -5,6 +5,6 @@
     },
     {
       "ParameterKey": "ParameterList",
-      "ParameterValue": "test/config/variable1"
+      "ParameterValue": "variable1, variable2"
     }
 ]
