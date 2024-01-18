@@ -22,3 +22,4 @@ Resources:
         Name: !Sub '/${Env}/test/${ParameterName}'
         Value: ""
         Description: !Sub 'SSM Parameter for ${ParameterName}'
+
