@@ -52,7 +52,7 @@ jobs:
         for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do
           TEMPLATE_DIR=$(basename $dir);
           STACK_NAME=$GITHUB_REF_NAME-stack-$TEMPLATE_DIR;
-          PARAMETERS=$(jq -r '.[] | .ParameterValue |= (env[.[1:]] // .) | [.ParameterKey, .ParameterValue] | join("=")' $TEMPLATE_DIR/$GITHUB_REF_NAME-parameters.json)
+          PARAMETERS=$(jq -r '.[] | "\(.ParameterKey)=\"\(.ParameterValue)\""' $TEMPLATE_DIR/$GITHUB_REF_NAME-parameters.json)
           echo "START DEPLOYING $STACK_NAME"
           aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides $PARAMETERS;
         done
