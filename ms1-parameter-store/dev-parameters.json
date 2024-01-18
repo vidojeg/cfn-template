@@ -1,6 +1,4 @@
-{
-  "Parameters": {
-    "Env": "dev",
-    "ParameterList": "variable1,variable2,variable3"
-  }
-}
+[
+  "Env=dev",
+  "ParameterList='variable1,variable2,variable3'"
+]
