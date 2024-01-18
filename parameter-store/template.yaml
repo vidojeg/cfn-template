@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create Multiple Parameters in Parameter Store
+Transform: 'AWS::LanguageExtensions'
+
+Parameters:
+  Env:
+    Type: String
+    Description: Env
+  ParameterList:
+    Type: CommaDelimitedList
+    Description: List of SSM parameters
+
+Resources:
+  Fn::ForEach::Parameters:
+  - ParameterName
+  - !Ref ParameterList
+  - SSMParameter${ParameterName}:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Type: SecureString
+        Name: !Sub '/${Env}ParameterName'
+        Value: ""
+        Description: !Sub 'SSM Parameter for ${ParameterName}'
