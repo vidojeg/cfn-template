@@ -17,7 +17,7 @@ Resources:
   - SSMParameter${ParameterName}:
       Type: AWS::SSM::Parameter
       Properties:
-        Type: SecureString
+        Type: String
         Name: !Sub '/${Env}/test/${ParameterName}'
         Value: ""
         Description: !Sub 'SSM Parameter for ${ParameterName}'
