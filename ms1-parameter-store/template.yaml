@@ -19,6 +19,6 @@ Resources:
       Properties:
         Type: String
         Name: !Sub '/${Env}/test/${ParameterName}'
-        Value: ""
+        Value: "Secret"
         Description: !Sub 'SSM Parameter for ${ParameterName}'
 
