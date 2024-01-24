@@ -26,6 +26,12 @@ jobs:
           aws cloudformation validate-template --template-body file://$DIR/template.yaml
           cfn-lint -I $DIR/template.yaml
         done
+  scans:
+    name: Security scans
+    runs-on: ubuntu-latest
+    steps:
+    - name: Chekout code
+      uses: actions/checkout@v4
     - name: Checkov scan
       uses: bridgecrewio/checkov-action@v12
       with:
@@ -34,6 +40,17 @@ jobs:
         framework: cloudformation
         quiet: true
         soft_fail: true
+    - name: Run Trivy vulnerability scanner in IaC mode
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'config'
+        hide-progress: false
+        format: 'github'
+        output: 'trivy-results.sarif'
+        exit-code: '1'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'
+
   deploy:
     name: Deploy Cloudformation Stack
     runs-on: ubuntu-latest
