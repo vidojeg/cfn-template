@@ -17,11 +17,11 @@ jobs:
       with:
         fetch-depth: 2
     - name: Install dependencies
-      run: pip install awscli cfn-lint
+      run: pip install cfn-lint
     - name: Validate & lint template
       run: |
-        ls -laht
-        git diff --name-only HEAD~1..HEAD | grep 'template.yaml' | while read line; do
+        aws --version
+        git diff --name-only HEAD~1..HEAD -- '***.yaml' '***.json' | while read line; do
           DIR=$(dirname "$line")
           aws cloudformation validate-template --template-body file://$DIR/template.yaml
           cfn-lint -I $DIR/template.yaml
@@ -63,8 +63,8 @@ jobs:
         pip install awscli
     - name: Deploy Stack
       run: |
-        for dir in $(git diff --dirstat=files,0 HEAD~1 | awk '{print $2}'); do
-          TEMPLATE_DIR=$(basename $dir);
+        dirname $(git diff --name-only HEAD~1..HEAD -- '***.yaml' '***.json')) | while read line; do
+          TEMPLATE_DIR=$line;
           STACK_NAME=$GITHUB_REF_NAME-stack-$TEMPLATE_DIR;
           echo "START DEPLOYING $STACK_NAME"
           aws cloudformation deploy --stack-name $STACK_NAME --template-file=$TEMPLATE_DIR/template.yaml --parameter-overrides file://$TEMPLATE_DIR/$GITHUB_REF_NAME-parameters.json;
