@@ -1,4 +1,10 @@
 [
-  "Env=dev",
-  "ParameterList=variable1,variable2,variable3,variable4"
+    {
+        "ParameterKey": "Env",
+        "ParameterValue": "dev"
+    },
+    {
+        "ParameterKey": "ParameterList",
+        "ParameterValue": "variable1,variable2,variable3,variable4"
+    }
 ]
